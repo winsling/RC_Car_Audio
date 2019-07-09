@@ -8,6 +8,9 @@ TMRpcm tmrpcm;   // create an object for use in this sketch
 
 int old_ACW=0;
 
+int Speed = 0;
+int Old_speed = 83;
+
 
 int AudioCommandWord=0;
 
@@ -30,12 +33,13 @@ union MultiBtnCharType {
 
 void receiveEvent(int CommandWord)
 {
-  while(Wire.available()){
+  while(1 < Wire.available()){
     CommandWord = Wire.read();
     AudioCommandWord = CommandWord;
     MultiBtnRcvChar.MultiBtnByte = (char) CommandWord;
     Serial.println(CommandWord);
-  }	
+  }
+  Speed = Wire.read();
 }
 
 void setup() {
@@ -51,9 +55,8 @@ if (!SD.begin(SD_ChipSelectPin)) {  // see if the card is present and can be ini
  
 tmrpcm.setVolume(5);
 tmrpcm.volume(1);
-
-  Wire.begin(9);
-  Wire.onReceive(receiveEvent);
+Wire.begin(9);
+Wire.onReceive(receiveEvent);
 }
 
 
@@ -61,11 +64,17 @@ tmrpcm.volume(1);
 
 void loop() { 
 
+  static bool startup=true; 
 
- if ((AudioCommandWord > 0) && (AudioCommandWord!=old_ACW)) {
-  if (MultiBtnRcvChar.MultiBtnBitField.MultiBlackBtn) {
-    tmrpcm.play("gt40.wav");
-    }
+  if (startup) {
+    startup = false;
+    tmrpcm.play("startup.wav");
+  }
+
+  if ((AudioCommandWord > 0) && (AudioCommandWord!=old_ACW)) {
+    if (MultiBtnRcvChar.MultiBtnBitField.MultiBlackBtn) {
+      tmrpcm.play("gt40.wav");
+      }
   if (MultiBtnRcvChar.MultiBtnBitField.MultiGrayBtn) {
     tmrpcm.play("gt40.wav");
     }
@@ -88,8 +97,14 @@ void loop() {
     tmrpcm.play("gt40.wav");
     }
   }
+
+  if (Speed < (Old_speed -2)) {
+    tmrpcm.play("brake.wav");
+  }
+
   old_ACW=AudioCommandWord; 
   return;   // don't do anything more if not
 
+  if 
 
 }
