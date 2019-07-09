@@ -52,9 +52,6 @@ if (!SD.begin(SD_ChipSelectPin)) {  // see if the card is present and can be ini
 tmrpcm.setVolume(5);
 tmrpcm.volume(1);
 
-
-
-
   Wire.begin(9);
   Wire.onReceive(receiveEvent);
 }
@@ -67,7 +64,27 @@ void loop() {
 
  if ((AudioCommandWord > 0) && (AudioCommandWord!=old_ACW)) {
   if (MultiBtnRcvChar.MultiBtnBitField.MultiBlackBtn) {
-    Serial.print("Playing:");
+    tmrpcm.play("gt40.wav");
+    }
+  if (MultiBtnRcvChar.MultiBtnBitField.MultiGrayBtn) {
+    tmrpcm.play("gt40.wav");
+    }
+  if (MultiBtnRcvChar.MultiBtnBitField.MultiGreenBtn) {
+    tmrpcm.play("gt40.wav");
+    }
+  if (MultiBtnRcvChar.MultiBtnBitField.MultiOrangeBtn) {
+    tmrpcm.play("gt40.wav");
+    }
+  if (MultiBtnRcvChar.MultiBtnBitField.MultiRedBtn) {
+    tmrpcm.play("gt40.wav");
+    }
+  if (MultiBtnRcvChar.MultiBtnBitField.MultiYellowBtn) {
+    tmrpcm.play("gt40.wav");
+    }
+  if (MultiBtnRcvChar.MultiBtnBitField.MultiWhiteBtn) {
+    tmrpcm.play("gt40.wav");
+    }
+  if (MultiBtnRcvChar.MultiBtnBitField.MultiBlueBtn) {
     tmrpcm.play("gt40.wav");
     }
   }
