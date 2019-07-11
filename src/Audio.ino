@@ -8,9 +8,10 @@ TMRpcm tmrpcm;   // create an object for use in this sketch
 
 int old_ACW=0;
 
-int Speed = 0;
+int Speed = 83;
 int Old_speed = 83;
 int SteeringAngle = 0;
+bool Brake = false;
 
 
 int AudioCommandWord=0;
@@ -41,6 +42,8 @@ void receiveEvent(int CommandWord)
     SteeringAngle = Wire.read();
   }
   Speed = Wire.read();  
+  if (Speed < (Old_speed-2)) Brake = true; else Brake = false;
+  Old_speed = Speed;
  
 }
 
@@ -70,42 +73,42 @@ void loop() {
 
   if (startup) {
     startup = false;
-    tmrpcm.play("gt40.wav");
+    tmrpcm.play("startup.wav");
   }
 
   if ((AudioCommandWord > 0) && (AudioCommandWord!=old_ACW)) {
     if (MultiBtnRcvChar.MultiBtnBitField.MultiBlackBtn) {
-      tmrpcm.play("gt40.wav");
+        tmrpcm.play("gt40.wav");
       }
   if (MultiBtnRcvChar.MultiBtnBitField.MultiGrayBtn) {
-    //tmrpcm.play("amb_conv.wav");
+    tmrpcm.play("amb.wav");
     }
   if (MultiBtnRcvChar.MultiBtnBitField.MultiGreenBtn) {
-    //tmrpcm.play("ambh_conv.wav");
+    tmrpcm.play("ambh.wav");
     }
   if (MultiBtnRcvChar.MultiBtnBitField.MultiOrangeBtn) {
-    //tmrpcm.play("ambul_conv.wav");
+    tmrpcm.play("ambul.wav");
     }
   if (MultiBtnRcvChar.MultiBtnBitField.MultiRedBtn) {
-    //tmrpcm.play("car+alarm_conv.wav");
+    tmrpcm.play("alarm.wav");
     }
   if (MultiBtnRcvChar.MultiBtnBitField.MultiYellowBtn) {
-    //tmrpcm.play("car+geardown_conv.wav");
+    tmrpcm.play("geardown.wav");
     }
   if (MultiBtnRcvChar.MultiBtnBitField.MultiWhiteBtn) {
-    //tmrpcm.play("carhorn_conv.wav");
+    tmrpcm.play("horn.wav");
     }
   if (MultiBtnRcvChar.MultiBtnBitField.MultiBlueBtn) {
-    //tmrpcm.play("lighter_conv.wav");
+    tmrpcm.play("brake.wav");
     }
   }
 
-  if ((SteeringAngle > 130) || (SteeringAngle <50)) {
-    tmrpcm.play("gt40.wav");
+  if (((SteeringAngle > 130) || (SteeringAngle <50)) && (SteeringAngle!=0)) {
+    tmrpcm.play("skid.wav");
   }
 
-  if (Speed < (Old_speed -2)) {
-    //tmrpcm.play("gt40.wav");
+  if (Brake) {
+    //tmrpcm.play("brake.wav");
   }
 
   old_ACW=AudioCommandWord; 
