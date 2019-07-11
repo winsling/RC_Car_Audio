@@ -10,6 +10,7 @@ int old_ACW=0;
 
 int Speed = 0;
 int Old_speed = 83;
+int SteeringAngle = 0;
 
 
 int AudioCommandWord=0;
@@ -37,9 +38,10 @@ void receiveEvent(int CommandWord)
     CommandWord = Wire.read();
     AudioCommandWord = CommandWord;
     MultiBtnRcvChar.MultiBtnByte = (char) CommandWord;
-    Serial.println(CommandWord);
+    SteeringAngle = Wire.read();
   }
-  Speed = Wire.read();
+  Speed = Wire.read();  
+ 
 }
 
 void setup() {
@@ -68,7 +70,7 @@ void loop() {
 
   if (startup) {
     startup = false;
-    tmrpcm.play("startup.wav");
+    tmrpcm.play("gt40.wav");
   }
 
   if ((AudioCommandWord > 0) && (AudioCommandWord!=old_ACW)) {
@@ -76,30 +78,34 @@ void loop() {
       tmrpcm.play("gt40.wav");
       }
   if (MultiBtnRcvChar.MultiBtnBitField.MultiGrayBtn) {
-    tmrpcm.play("gt40.wav");
+    //tmrpcm.play("amb_conv.wav");
     }
   if (MultiBtnRcvChar.MultiBtnBitField.MultiGreenBtn) {
-    tmrpcm.play("gt40.wav");
+    //tmrpcm.play("ambh_conv.wav");
     }
   if (MultiBtnRcvChar.MultiBtnBitField.MultiOrangeBtn) {
-    tmrpcm.play("gt40.wav");
+    //tmrpcm.play("ambul_conv.wav");
     }
   if (MultiBtnRcvChar.MultiBtnBitField.MultiRedBtn) {
-    tmrpcm.play("gt40.wav");
+    //tmrpcm.play("car+alarm_conv.wav");
     }
   if (MultiBtnRcvChar.MultiBtnBitField.MultiYellowBtn) {
-    tmrpcm.play("gt40.wav");
+    //tmrpcm.play("car+geardown_conv.wav");
     }
   if (MultiBtnRcvChar.MultiBtnBitField.MultiWhiteBtn) {
-    tmrpcm.play("gt40.wav");
+    //tmrpcm.play("carhorn_conv.wav");
     }
   if (MultiBtnRcvChar.MultiBtnBitField.MultiBlueBtn) {
-    tmrpcm.play("gt40.wav");
+    //tmrpcm.play("lighter_conv.wav");
     }
   }
 
+  if ((SteeringAngle > 130) || (SteeringAngle <50)) {
+    tmrpcm.play("gt40.wav");
+  }
+
   if (Speed < (Old_speed -2)) {
-    tmrpcm.play("brake.wav");
+    //tmrpcm.play("gt40.wav");
   }
 
   old_ACW=AudioCommandWord; 
