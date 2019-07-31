@@ -103,9 +103,6 @@ void loop() {
     }
   }
 
-  if (((SteeringAngle > 130) || (SteeringAngle <50)) && (SteeringAngle!=0)) {
-    tmrpcm.play("skid.wav");
-  }
 
   if (Brake) {
     //tmrpcm.play("brake.wav");
