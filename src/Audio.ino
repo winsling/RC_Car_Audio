@@ -73,7 +73,7 @@ void loop() {
 
   if (startup) {
     startup = false;
-    tmrpcm.play("startup.wav");
+    tmrpcm.play("StartCar.wav");
   }
 
   if ((AudioCommandWord > 0) && (AudioCommandWord!=old_ACW)) {
